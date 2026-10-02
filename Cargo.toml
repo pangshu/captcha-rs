@@ -1,0 +1,35 @@
+[package]
+name = "captcha-rs"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.70"
+description = "统一验证码引擎：图像 / 音频 / 滑块 / 文字点选验证码"
+license = "MIT OR Apache-2.0"
+
+[features]
+default = ["image", "audio", "interactive"]
+# 图像验证码（依赖 image 渲染）
+image = ["dep:image"]
+# 音频验证码（纯手写 WAV 合成，无解码依赖）
+audio = []
+# 交互式验证码（滑块 / 文字点选，复用 image 渲染管线，故强制开启 image）
+interactive = ["image"]
+
+[dependencies]
+# 字体解析与字形渲染
+ab_glyph = "0.2"
+# PNG 图像编解码（图像验证码、滑块背景图）
+image = { version = "0.25", optional = true }
+# 答案 JSON 序列化 / 反序列化
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+# 统一错误类型派生
+thiserror = "2"
+# 随机数（thread_rng / gen_range / SliceRandom，0.9 起 API 更名，锁定 0.8）
+rand = "0.8"
+# base64 data URI 编码
+base64 = "0.22"
+# 高性能并发缓存（MemoryStore 后端）
+moka = { version = "0.12", features = ["sync"] }
+# 字体加载日志
+log = "0.4"
